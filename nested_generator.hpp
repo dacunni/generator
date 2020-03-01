@@ -22,54 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-template<typename T>
-range_generator<T>::range_generator(T min, T step, T max)
-    : next_value(min), min_value(min),
-    step_size(step), max_value(max)
-{
-}
-
-template<typename T>
-range_generator<T>::range_generator(T min, T max)
-    : range_generator(min, (T) 1, max)
-{
-}
-
-template<typename T>
-bool range_generator<T>::done()  { return next_value >= max_value; }
-
-template<typename T>
-T range_generator<T>::current()  { return next_value; }
-
-template<typename T>
-T range_generator<T>::next()
-{
-    T cur = next_value;
-    next_value += step_size;
-    return cur;
-}
-
-template<typename T>
-void range_generator<T>::reset() { next_value = min_value; }
-
-template<typename T>
-void range_generator<T>::for_each(std::function<void(T)> f)
-{
-    while(!done()) {
-        T value = next();
-        f(value);
-    }
-}
- 
-template<typename T>
-void range_generator<T>::for_each(std::function<void(T, T)> f)
-{
-    while(!done()) {
-        T value = next();
-        f(value, value + step_size);
-    }
-}
-
 template<typename G1, typename G2>
 nested_generator<G1, G2>::nested_generator(G1 g1, G2 g2)
     : gen1(g1), gen2(g2)

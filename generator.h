@@ -97,5 +97,8 @@ nested_generator<G1, G2> nest(G1 g1, G2 g2) {
     return nested_generator<G1, G2>(g1, g2);
 }
 
-#include "generator.hpp"
+// Template implementations
+#include "range_generator.hpp"
+#include "nested_generator.hpp"
+
 #endif // __GENERATOR_LIBRARY__
