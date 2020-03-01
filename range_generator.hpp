@@ -1,4 +1,4 @@
-// Single file header-only library for creating ranged generators
+// Header-only library for creating ranged generators
 //
 // MIT License
 // 
