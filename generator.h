@@ -21,6 +21,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+#ifndef __GENERATOR_LIBRARY__
+#define __GENERATOR_LIBRARY__
 #include <functional>
 
 template<typename T>
@@ -42,29 +44,17 @@ template<typename T>
 class range_generator : public generator<T>
 {
     public:
-        range_generator(T min, T step, T max)
-            : next_value(min), min_value(min),
-              step_size(step), max_value(max) {}
-        range_generator(T min, T max) : range_generator(min, (T) 1, max) {}
+        range_generator(T min, T step, T max);
+        range_generator(T min, T max);
         virtual ~range_generator() = default;
 
-        virtual bool done()  { return next_value >= max_value; }
-        virtual T current()  { return next_value; }
-        virtual T next()     { T cur = next_value; next_value += step_size; return cur; }
-        virtual void reset() { next_value = min_value; }
+        virtual bool done();
+        virtual T current();
+        virtual T next();
+        virtual void reset();
 
-        virtual void for_each(std::function<void(T)> f) {
-            while(!done()) {
-                T value = next();
-                f(value);
-            }
-        }
-        virtual void for_each(std::function<void(T, T)> f) {
-            while(!done()) {
-                T value = next();
-                f(value, value + step_size);
-            }
-        }
+        virtual void for_each(std::function<void(T)> f);
+        virtual void for_each(std::function<void(T, T)> f);
 
     protected:
         T next_value;
@@ -87,28 +77,15 @@ template<typename G1, typename G2>
 class nested_generator
 {
     public:
-        nested_generator(G1 g1, G2 g2) : gen1(g1), gen2(g2) {}
+        nested_generator(G1 g1, G2 g2);
 
-        bool done() { return gen1.done(); }
-
-        template<typename T1, typename T2>
-        std::pair<T1, T2> next() {
-            auto r = std::make_pair(gen1.current(), gen2.current());
-            gen2.next();
-            if(gen2.done()) {
-                gen1.next();
-                gen2.reset();
-            }
-            return r;
-        }
+        bool done();
 
         template<typename T1, typename T2>
-        void for_each(std::function<void(T1, T2)> f) {
-            while(!done()) {
-                auto value = next<T1, T2>();
-                f(value.first, value.second);
-            }
-        }
+        std::pair<T1, T2> next();
+
+        template<typename T1, typename T2>
+        void for_each(std::function<void(T1, T2)> f);
 
     protected:
         G1 gen1;
@@ -120,3 +97,5 @@ nested_generator<G1, G2> nest(G1 g1, G2 g2) {
     return nested_generator<G1, G2>(g1, g2);
 }
 
+#include "generator.hpp"
+#endif // __GENERATOR_LIBRARY__

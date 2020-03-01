@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include "generator.h"
 
+// Helper for annotating output
 template <typename T>
 void print_range(const char * desc, T minval, T step, T maxval)
 {
@@ -37,6 +38,7 @@ void simple_range_manual()
     int minval = 0, step = 5, maxval = 20;
 
     print_range("Simple Range Manual", minval, step, maxval);
+
     range_generator<int> g(minval, step, maxval);
 
     while(!g.done()) {
@@ -54,6 +56,7 @@ void simple_range_foreach()
     int minval = 0, step = 5, maxval = 20;
 
     print_range("Simple Range For Each", minval, step, maxval);
+
     range_generator<int> g(minval, step, maxval);
 
     g.for_each(print_value);
@@ -69,6 +72,7 @@ void simple_range_foreach_subrange()
     float minval = -2.3, step = 1.2, maxval = 5.7;
 
     print_range("Simple Range For Each SubRange", minval, step, maxval);
+
     range_generator<float> g(minval, step, maxval);
 
     g.for_each(print_subrange);
@@ -81,6 +85,7 @@ void range_foreach_walk_subrange_manual()
     auto print_value = [](int v) {
         std::cout << v << "  ";
     };
+
     auto walk_subrange = [=](int v, int n) {
         std::cout << v << " - " << n << std::endl;
         range_generator<int> g(v, n);
@@ -91,6 +96,7 @@ void range_foreach_walk_subrange_manual()
     int minval = 0, step = 5, maxval = 20;
 
     print_range("Range For Each Walk Subrange Manual", minval, step, maxval);
+
     range_generator<int> g(minval, step, maxval);
 
     g.for_each(walk_subrange);
@@ -102,18 +108,19 @@ void nested_ranges_foreach()
 {
     int outermin = 0, outerstep = 5, outermax = 20;
     float innermin = 1.4, innerstep = 0.93, innermax = 5.7;
+
     print_range("Nested Ranges Outer", outermin, outerstep, outermax);
     print_range("Nested Ranges Inner", innermin, innerstep, innermax);
-    auto n = nest(range(outermin, outerstep, outermax),
-                  range(innermin, innerstep, innermax));
 
     auto print_pair = [](int v, float n) {
         std::cout << v << ", " << n << std::endl;
     };
 
+    auto n = nest(range(outermin, outerstep, outermax),
+                  range(innermin, innerstep, innermax));
+
     n.for_each<int, float>(print_pair);
 }
-
 
 int main(int argc, char ** argv)
 {
