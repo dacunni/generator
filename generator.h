@@ -1,3 +1,26 @@
+// Single file header-only library for creating ranged generators
+//
+// MIT License
+// 
+// Copyright (c) 2020 David Cunningham
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 #include <functional>
 
 template<typename T>
@@ -91,23 +114,6 @@ class nested_generator
         G1 gen1;
         G2 gen2;
 };
-
-template<typename G1, typename... Gs>
-class nested_generator_n
-{
-    public:
-        nested_generator_n(G1 g1, Gs... gs)
-            : gen1(g1), gens(gs...) {}
-
-    protected:
-        G1 gen1;
-        nested_generator<Gs...> gens;
-};
-
-template<typename G1, typename... Gs>
-nested_generator_n<G1, Gs...> nest(G1 g1, Gs... gs) {
-    return nested_generator_n<G1, Gs...>(g1, gs...);
-}
 
 template<typename G1, typename G2>
 nested_generator<G1, G2> nest(G1 g1, G2 g2) {
