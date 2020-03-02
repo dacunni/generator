@@ -7,6 +7,10 @@ Simple header-only range generator library allowing for compact foreach-style it
 
 All ranges are closed on the lower value and open on the upper value (eg: [min, max)).
 
+```
+#include <generator.h>
+```
+
 ### Item Iteration
 ```c++
 // Range of ints from 0 to 19 by 5
