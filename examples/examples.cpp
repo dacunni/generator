@@ -22,7 +22,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 #include <iostream>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "generator.h"
 
 // Helper for annotating output
@@ -122,6 +123,33 @@ void nested_ranges_foreach()
     n.for_each<int, float>(print_pair);
 }
 
+// Walk through the pixels in each tile defined over a 2D domain
+void tile_raster_walk()
+{
+    int numrows = 5, numcols = 4;
+    int tilesize = 2;
+
+    std::cout << "--- Walk Tile Pixels In Raster Order ---\n";
+
+    auto walk_tile = [&](int startrow, int startcol) {
+        printf("tile %2d %2d\n", startrow, startcol);
+
+        // Walk pixels within tile, taking care not to overstep the bounds
+        // of the range for imperfect tilings.
+        auto n = nest(range(startrow , std::min(numcols, startrow + tilesize)),
+                      range(startcol , std::max(numrows, startcol + tilesize)));
+
+        n.for_each<int, int>([&](int pixrow, int pixcol) {
+            printf("  px %2d %2d\n", pixrow, pixcol);
+        });
+    };
+
+    auto n = nest(range(0, tilesize, numcols),
+                  range(0, tilesize, numrows));
+
+    n.for_each<int, int>(walk_tile);
+}
+
 int main(int argc, char ** argv)
 {
     simple_range_manual();
@@ -129,6 +157,7 @@ int main(int argc, char ** argv)
     simple_range_foreach_subrange();
     range_foreach_walk_subrange_manual();
     nested_ranges_foreach();
+    tile_raster_walk();
 
     return EXIT_SUCCESS;
 }
