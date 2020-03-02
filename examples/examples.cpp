@@ -136,16 +136,16 @@ void tile_raster_walk()
 
         // Walk pixels within tile, taking care not to overstep the bounds
         // of the range for imperfect tilings.
-        auto n = nest(range(startrow , std::min(numcols, startrow + tilesize)),
-                      range(startcol , std::max(numrows, startcol + tilesize)));
+        auto n = nest(range(startrow , std::min(numrows, startrow + tilesize)),
+                      range(startcol , std::min(numcols, startcol + tilesize)));
 
         n.for_each<int, int>([&](int pixrow, int pixcol) {
             printf("  px %2d %2d\n", pixrow, pixcol);
         });
     };
 
-    auto n = nest(range(0, tilesize, numcols),
-                  range(0, tilesize, numrows));
+    auto n = nest(range(0, tilesize, numrows),
+                  range(0, tilesize, numcols));
 
     n.for_each<int, int>(walk_tile);
 }
