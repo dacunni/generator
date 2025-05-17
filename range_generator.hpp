@@ -24,8 +24,10 @@
 
 template<typename T>
 range_generator<T>::range_generator(T min, T step, T max)
-    : next_value(min), min_value(min),
-    step_size(step), max_value(max)
+    : next_value(min),
+    min_value(min),
+    max_value(max),
+    step_size(step)
 {
 }
 
